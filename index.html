@@ -49,7 +49,6 @@
       border-radius: 12px;
       cursor: pointer;
       transition: 0.3s;
-      border: 1px solid transparent;
     }
 
     .card:hover {
@@ -81,10 +80,7 @@
     .modal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
@@ -117,7 +113,6 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      font-size: 14px;
     }
 
     .juara-table td {
@@ -142,10 +137,6 @@
       background: #1e293b;
       padding: 15px;
       border-radius: 12px;
-    }
-
-    .form-box h3 {
-      color: #38bdf8;
     }
 
     input, textarea {
@@ -183,8 +174,8 @@
     <input id="nama" placeholder="Nama siswa">
     <input id="kelas" placeholder="Kelas (contoh: XII TKJ)">
     <input id="lombaInput" placeholder="Jenis Lomba">
-    <input id="juaraInput" placeholder="Juara Keberapa Anda">
-    <textarea id="pesan" placeholder="Isi konfirmasi... (CASH / REKENING)"></textarea>
+    <input id="juaraInput" placeholder="Juara Anda (contoh: Juara 1)">
+    <textarea id="pesan" placeholder="Isi konfirmasi (CASH / REKENING)"></textarea>
 
     <button onclick="kirimWA()">Kirim Konfirmasi</button>
   </div>
@@ -215,26 +206,26 @@ const lomba = [
     judul: "Lomba Coding TKJ",
     deskripsi: "Membuat aplikasi web sederhana.",
     detail: "Tanggal: 30 Juni 2026\nLokasi: Lab Komputer\nHadiah: Uang Pendidikan",
-    juara: `
-      <tr><td>🥇 Juara 1</td><td>Asef</td></tr>
-      <tr><td>🥈 Juara 2</td><td>Rhati</td></tr>
-      <tr><td>🥉 Juara 3</td><td>Chalvin</td></tr>
-      <tr><td>🥉 Harapan 1</td><td>Putri</td></tr>
-      <tr><td>🥉 Harapan 2</td><td>Tiara</td></tr>
-      <tr><td>🥉 Harapan 3</td><td>Biaca</td></tr>
-      <tr><td>🥉 Harapan 4</td><td>Julisa</td></tr>
-      <tr><td>🥉 Harapan 5</td><td>Naftalia</td></tr>
-    `
+    juara: [
+      { level: "🥇 Juara 1", nama: "Asef" },
+      { level: "🥈 Juara 2", nama: "Rhati" },
+      { level: "🥉 Juara 3", nama: "Chalvin" }
+      { level: "🥉 Harapan 1", nama: "Putri" }
+      { level: "🥉 Harapan 2", nama: "Tiara" }
+      { level: "🥉 Harapan 3", nama: "Bianca" }
+      { level: "🥉 Harapan 4", nama: "Julisa" }
+      { level: "🥉 Harapan 5", nama: "Naftalia" }
+    ]
   },
   {
     judul: "Lomba Desain Poster",
     deskripsi: "Poster tema teknologi.",
     detail: "Tanggal: 27 Mei 2026\nLokasi: Multimedia\nHadiah: Sertifikat",
-    juara: `
-      <tr><td>🥇 Juara 1</td><td>...</td></tr>
-      <tr><td>🥈 Juara 2</td><td>...</td></tr>
-      <tr><td>🥉 Juara 3</td><td>...</td></tr>
-    `
+    juara: [
+      { level: "🥇 Juara 1", nama: "..." },
+      { level: "🥈 Juara 2", nama: "..." },
+      { level: "🥉 Juara 3", nama: "..." }
+    ]
   }
 ];
 
@@ -257,7 +248,12 @@ function tampil(data) {
 function bukaModal(index) {
   document.getElementById("judul").innerText = lomba[index].judul;
   document.getElementById("detail").innerText = lomba[index].detail;
-  document.getElementById("juaraTable").innerHTML = lomba[index].juara;
+
+  document.getElementById("juaraTable").innerHTML =
+    lomba[index].juara.map(j =>
+      `<tr><td>${j.level}</td><td>${j.nama}</td></tr>`
+    ).join("");
+
   document.getElementById("modal").style.display = "flex";
 }
 
@@ -265,24 +261,35 @@ function tutupModal() {
   document.getElementById("modal").style.display = "none";
 }
 
+/* VALIDASI NAMA FIX */
 function kirimWA() {
   const nama = document.getElementById("nama").value.trim();
   const kelas = document.getElementById("kelas").value.trim();
   const lombaInput = document.getElementById("lombaInput").value.trim();
-  const juara = document.getElementById("juaraInput").value.trim();
+  const juaraInput = document.getElementById("juaraInput").value.trim();
   const pesan = document.getElementById("pesan").value.trim();
 
-  if (!nama || !kelas || !lombaInput || !juara || !pesan) {
+  if (!nama || !kelas || !lombaInput || !juaraInput || !pesan) {
     alert("Lengkapi semua data!");
     return;
   }
 
-  let ditemukan = lomba.some(l =>
-    l.judul.toLowerCase().includes(nama.toLowerCase())
-  );
+  let ditemukan = false;
+
+  for (let i = 0; i < lomba.length; i++) {
+    if (
+      lomba[i].juara.some(j =>
+        j.nama.toLowerCase() === nama.toLowerCase() &&
+        j.level.toLowerCase().includes(juaraInput.toLowerCase())
+      )
+    ) {
+      ditemukan = true;
+      break;
+    }
+  }
 
   if (!ditemukan) {
-    alert("❌ Nama tidak ditemukan di data lomba!");
+    alert("❌ Nama atau juara tidak cocok dengan data pemenang!");
     return;
   }
 
@@ -292,7 +299,7 @@ function kirimWA() {
 Nama: ${nama}%0A
 Kelas: ${kelas}%0A
 Lomba: ${lombaInput}%0A
-Juara: ${juara}%0A
+Juara: ${juaraInput}%0A
 Pesan: ${pesan}`;
 
   window.open(`https://wa.me/${noWA}?text=${text}`, "_blank");
