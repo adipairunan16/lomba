@@ -133,6 +133,33 @@
       color: black;
       border-radius: 8px;
       cursor: pointer;
+      width: 100%;
+    }
+
+    /* FORM KONFIRMASI */
+    .form-box {
+      margin-top: 30px;
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .form-box h3 {
+      color: #38bdf8;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    textarea {
+      height: 80px;
+      resize: none;
     }
   </style>
 </head>
@@ -148,6 +175,18 @@
   <input type="text" class="search-box" id="search" placeholder="Cari lomba...">
 
   <div class="grid" id="listLomba"></div>
+
+  <!-- FORM KONFIRMASI -->
+  <div class="form-box">
+    <h3>📩 Form Konfirmasi</h3>
+
+    <input id="nama" placeholder="Nama siswa">
+    <input id="kelas" placeholder="Kelas (contoh: XII TKJ)">
+    <textarea id="pesan" placeholder="Isi konfirmasi..."></textarea>
+
+    <button onclick="kirimWA()">Kirim Konfirmasi</button>
+  </div>
+
 </div>
 
 <!-- MODAL -->
@@ -168,6 +207,7 @@
 </div>
 
 <script>
+
 const lomba = [
   {
     judul: "Lomba Coding TKJ",
@@ -177,7 +217,6 @@ const lomba = [
       <tr><td>🥇 Juara 1</td><td>Asef</td></tr>
       <tr><td>🥈 Juara 2</td><td>Budi</td></tr>
       <tr><td>🥉 Juara 3</td><td>Siti</td></tr>
-      <tr><td>⭐ Harapan 1</td><td>Andi</td></tr>
     `
   },
   {
@@ -188,16 +227,6 @@ const lomba = [
       <tr><td>🥇 Juara 1</td><td>Rina</td></tr>
       <tr><td>🥈 Juara 2</td><td>Ilham</td></tr>
       <tr><td>🥉 Juara 3</td><td>Dewi</td></tr>
-    `
-  },
-  {
-    judul: "Lomba Jaringan Komputer",
-    deskripsi: "Setting LAN & troubleshooting.",
-    detail: "Tanggal: 30 Mei 2026\nLokasi: Lab TKJ\nHadiah: Sertifikat + Piala",
-    juara: `
-      <tr><td>🥇 Juara 1</td><td>Fajar</td></tr>
-      <tr><td>🥈 Juara 2</td><td>Rizky</td></tr>
-      <tr><td>🥉 Juara 3</td><td>Nando</td></tr>
     `
   }
 ];
@@ -229,6 +258,24 @@ function tutupModal() {
   document.getElementById("modal").style.display = "none";
 }
 
+/* KONFIRMASI WA */
+function kirimWA() {
+  const nama = document.getElementById("nama").value;
+  const kelas = document.getElementById("kelas").value;
+  const pesan = document.getElementById("pesan").value;
+
+  if (!nama || !kelas || !pesan) {
+    alert("Lengkapi semua data!");
+    return;
+  }
+
+  const noWA = "082251949757"; // ganti nomor kamu
+
+  const text = `📩 KONFIRMASI LOMBA%0ANama: ${nama}%0AKelas: ${kelas}%0APesan: ${pesan}`;
+
+  window.open(`https://wa.me/${noWA}?text=${text}`, "_blank");
+}
+
 search.addEventListener("input", function() {
   const keyword = this.value.toLowerCase();
   const hasil = lomba.filter(l =>
@@ -238,6 +285,7 @@ search.addEventListener("input", function() {
 });
 
 tampil(lomba);
+
 </script>
 
 </body>
