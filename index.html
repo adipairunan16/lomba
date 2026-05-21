@@ -136,7 +136,7 @@
       width: 100%;
     }
 
-    /* FORM KONFIRMASI */
+    /* FORM */
     .form-box {
       margin-top: 30px;
       background: #1e293b;
@@ -182,6 +182,7 @@
 
     <input id="nama" placeholder="Nama siswa">
     <input id="kelas" placeholder="Kelas (contoh: XII TKJ)">
+    <input id="lombaInput" placeholder="Jenis Lomba">
     <textarea id="pesan" placeholder="Isi konfirmasi..."></textarea>
 
     <button onclick="kirimWA()">Kirim Konfirmasi</button>
@@ -215,8 +216,8 @@ const lomba = [
     detail: "Tanggal: 30 Juni 2026\nLokasi: Lab Komputer\nHadiah: Uang Pendidikan",
     juara: `
       <tr><td>🥇 Juara 1</td><td>Asef</td></tr>
-      <tr><td>🥈 Juara 2</td><td>Budi</td></tr>
-      <tr><td>🥉 Juara 3</td><td>Siti</td></tr>
+      <tr><td>🥈 Juara 2</td><td>...</td></tr>
+      <tr><td>🥉 Juara 3</td><td>...</td></tr>
     `
   },
   {
@@ -224,9 +225,9 @@ const lomba = [
     deskripsi: "Poster tema teknologi.",
     detail: "Tanggal: 27 Mei 2026\nLokasi: Ruang Multimedia\nHadiah: Sertifikat + Merchandise",
     juara: `
-      <tr><td>🥇 Juara 1</td><td>Rina</td></tr>
-      <tr><td>🥈 Juara 2</td><td>Ilham</td></tr>
-      <tr><td>🥉 Juara 3</td><td>Dewi</td></tr>
+      <tr><td>🥇 Juara 1</td><td>...</td></tr>
+      <tr><td>🥈 Juara 2</td><td>...</td></tr>
+      <tr><td>🥉 Juara 3</td><td>...</td></tr>
     `
   }
 ];
@@ -258,20 +259,40 @@ function tutupModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-/* KONFIRMASI WA */
+/* KONFIRMASI WA + VALIDASI NAMA */
 function kirimWA() {
-  const nama = document.getElementById("nama").value;
-  const kelas = document.getElementById("kelas").value;
-  const pesan = document.getElementById("pesan").value;
+  const nama = document.getElementById("nama").value.trim();
+  const kelas = document.getElementById("kelas").value.trim();
+  const jenisLomba = document.getElementById("lombaInput").value.trim();
+  const pesan = document.getElementById("pesan").value.trim();
 
-  if (!nama || !kelas || !pesan) {
+  if (!nama || !kelas || !jenisLomba || !pesan) {
     alert("Lengkapi semua data!");
     return;
   }
 
-  const noWA = "6282251949757"; // ganti nomor kamu
+  // CEK NAMA ADA DI JUARA
+  let ditemukan = false;
 
-  const text = `📩 KONFIRMASI LOMBA%0ANama: ${nama}%0AKelas: ${kelas}%0APesan: ${pesan}`;
+  for (let i = 0; i < lomba.length; i++) {
+    if (lomba[i].juara.toLowerCase().includes(nama.toLowerCase())) {
+      ditemukan = true;
+      break;
+    }
+  }
+
+  if (!ditemukan) {
+    alert("❌ Nama kamu tidak terdaftar di pemenang lomba!");
+    return;
+  }
+
+  const noWA = "6282251949757";
+
+  const text = `📩 KONFIRMASI LOMBA%0A
+Nama: ${nama}%0A
+Kelas: ${kelas}%0A
+Lomba: ${jenisLomba}%0A
+Pesan: ${pesan}`;
 
   window.open(`https://wa.me/${noWA}?text=${text}`, "_blank");
 }
