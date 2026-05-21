@@ -176,15 +176,15 @@
 
   <div class="grid" id="listLomba"></div>
 
-  <!-- FORM KONFIRMASI PENGAMBILAN HADIAH-->
+  <!-- FORM -->
   <div class="form-box">
-    <h3>📩 Form Konfirmasi PENGAMBILAN HADIAH</h3>
+    <h3>📩 Konfirmasi Pengambilan Hadiah</h3>
 
     <input id="nama" placeholder="Nama siswa">
     <input id="kelas" placeholder="Kelas (contoh: XII TKJ)">
     <input id="lombaInput" placeholder="Jenis Lomba">
-    <input id="juara" placeholder="Juara Keberapa Anda">
-    <textarea id="pesan" placeholder="Isi konfirmasi untuk mengambil hadiah...(CASH/KIRIM NOREK)"></textarea>
+    <input id="juaraInput" placeholder="Juara Keberapa Anda">
+    <textarea id="pesan" placeholder="Isi konfirmasi... (CASH / REKENING)"></textarea>
 
     <button onclick="kirimWA()">Kirim Konfirmasi</button>
   </div>
@@ -201,7 +201,7 @@
 
     <div class="juara-box">
       <b>🏆 Pemenang Lomba</b>
-      <table class="juara-table" id="juara"></table>
+      <table class="juara-table" id="juaraTable"></table>
     </div>
 
     <button onclick="tutupModal()">Tutup</button>
@@ -219,17 +219,17 @@ const lomba = [
       <tr><td>🥇 Juara 1</td><td>Asef</td></tr>
       <tr><td>🥈 Juara 2</td><td>Rhati</td></tr>
       <tr><td>🥉 Juara 3</td><td>Chalvin</td></tr>
-      <tr><td>    Harapan 1</td><td>...</td></tr>
-      <tr><td>    Harapan 2</td><td>...</td></tr>
-      <tr><td>    Harapan 3</td><td>...</td></tr>
-      <tr><td>    Harapan 4</td><td>...</td></tr>
-      <tr><td>    Harapan 5</td><td>...</td></tr>
+      <tr><td>🥉 Harapan 1</td><td>Putri</td></tr>
+      <tr><td>🥉 Harapan 2</td><td>Tiara</td></tr>
+      <tr><td>🥉 Harapan 3</td><td>Biaca</td></tr>
+      <tr><td>🥉 Harapan 4</td><td>Julisa</td></tr>
+      <tr><td>🥉 Harapan 5</td><td>Naftalia</td></tr>
     `
   },
   {
     judul: "Lomba Desain Poster",
     deskripsi: "Poster tema teknologi.",
-    detail: "Tanggal: 27 Mei 2026\nLokasi: Ruang Multimedia\nHadiah: Sertifikat + Merchandise",
+    detail: "Tanggal: 27 Mei 2026\nLokasi: Multimedia\nHadiah: Sertifikat",
     juara: `
       <tr><td>🥇 Juara 1</td><td>...</td></tr>
       <tr><td>🥈 Juara 2</td><td>...</td></tr>
@@ -257,7 +257,7 @@ function tampil(data) {
 function bukaModal(index) {
   document.getElementById("judul").innerText = lomba[index].judul;
   document.getElementById("detail").innerText = lomba[index].detail;
-  document.getElementById("juara").innerHTML = lomba[index].juara;
+  document.getElementById("juaraTable").innerHTML = lomba[index].juara;
   document.getElementById("modal").style.display = "flex";
 }
 
@@ -265,41 +265,34 @@ function tutupModal() {
   document.getElementById("modal").style.display = "none";
 }
 
-/* KONFIRMASI WA + VALIDASI NAMA */
 function kirimWA() {
   const nama = document.getElementById("nama").value.trim();
   const kelas = document.getElementById("kelas").value.trim();
-  const juara = document.getElementById("juara").value.trim();
-  const jenisLomba = document.getElementById("lombaInput").value.trim();
+  const lombaInput = document.getElementById("lombaInput").value.trim();
+  const juara = document.getElementById("juaraInput").value.trim();
   const pesan = document.getElementById("pesan").value.trim();
 
-  if (!nama || !kelas || !jenisLomba || !pesan || !juara) {
+  if (!nama || !kelas || !lombaInput || !juara || !pesan) {
     alert("Lengkapi semua data!");
     return;
   }
 
-  // CEK NAMA ADA DI JUARA
-  let ditemukan = false;
-
-  for (let i = 0; i < lomba.length; i++) {
-    if (lomba[i].juara.toLowerCase().includes(nama.toLowerCase())) {
-      ditemukan = true;
-      break;
-    }
-  }
+  let ditemukan = lomba.some(l =>
+    l.judul.toLowerCase().includes(nama.toLowerCase())
+  );
 
   if (!ditemukan) {
-    alert("❌ Nama kamu tidak terdaftar di pemenang lomba!");
+    alert("❌ Nama tidak ditemukan di data lomba!");
     return;
   }
 
   const noWA = "6282251949757";
 
-  const text = `📩 KONFIRMASI LOMBA%0A
+  const text = `📩 KONFIRMASI%0A
 Nama: ${nama}%0A
 Kelas: ${kelas}%0A
+Lomba: ${lombaInput}%0A
 Juara: ${juara}%0A
-Lomba: ${jenisLomba}%0A
 Pesan: ${pesan}`;
 
   window.open(`https://wa.me/${noWA}?text=${text}`, "_blank");
