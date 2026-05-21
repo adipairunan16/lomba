@@ -105,12 +105,24 @@
       font-size: 20px;
     }
 
-    .juara {
+    .juara-box {
+      margin-top: 15px;
       background: #0ea5e9;
       padding: 10px;
       border-radius: 10px;
-      margin-top: 10px;
       color: black;
+    }
+
+    .juara-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .juara-table td {
+      padding: 6px;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
     }
 
     button {
@@ -142,12 +154,13 @@
 <div class="modal" id="modal">
   <div class="modal-content">
     <span class="close" onclick="tutupModal()">✖</span>
+
     <h2 id="judul"></h2>
     <p id="detail"></p>
 
-    <div class="juara">
-      <b>🏆 Daftar Juara:</b>
-      <p id="juara"></p>
+    <div class="juara-box">
+      <b>🏆 Pemenang Lomba</b>
+      <table class="juara-table" id="juara"></table>
     </div>
 
     <button onclick="tutupModal()">Tutup</button>
@@ -159,23 +172,22 @@ const lomba = [
   {
     judul: "Lomba Coding TKJ",
     deskripsi: "Membuat aplikasi web sederhana.",
-    detail: "Tanggal: 30 juni 2026\nLokasi: Lab Komputer\nHadiah: Uang Pendidikan",
+    detail: "Tanggal: 30 Juni 2026\nLokasi: Lab Komputer\nHadiah: Uang Pendidikan",
     juara: `
-🥇 Juara 1: Asef<br>
-🥈 Juara 2: .....<br>
-🥉 Juara 3: .....<br>
-    Harapan 1: .....<br>
-    Juara 2: .....
-`
+      <tr><td>🥇 Juara 1</td><td>Asef</td></tr>
+      <tr><td>🥈 Juara 2</td><td>Budi</td></tr>
+      <tr><td>🥉 Juara 3</td><td>Siti</td></tr>
+      <tr><td>⭐ Harapan 1</td><td>Andi</td></tr>
+    `
   },
   {
     judul: "Lomba Desain Poster",
     deskripsi: "Poster tema teknologi.",
     detail: "Tanggal: 27 Mei 2026\nLokasi: Ruang Multimedia\nHadiah: Sertifikat + Merchandise",
     juara: `
-🥇 Juara 1: .....<br>
-🥈 Juara 2: .....<br>
-🥉 Juara 3: ....
+      <tr><td>🥇 Juara 1</td><td>Rina</td></tr>
+      <tr><td>🥈 Juara 2</td><td>Ilham</td></tr>
+      <tr><td>🥉 Juara 3</td><td>Dewi</td></tr>
     `
   },
   {
@@ -183,9 +195,9 @@ const lomba = [
     deskripsi: "Setting LAN & troubleshooting.",
     detail: "Tanggal: 30 Mei 2026\nLokasi: Lab TKJ\nHadiah: Sertifikat + Piala",
     juara: `
-🥇 Juara 1: .....<br>
-🥈 Juara 2: .....<br>
-🥉 Juara 3: .....
+      <tr><td>🥇 Juara 1</td><td>Fajar</td></tr>
+      <tr><td>🥈 Juara 2</td><td>Rizky</td></tr>
+      <tr><td>🥉 Juara 3</td><td>Nando</td></tr>
     `
   }
 ];
