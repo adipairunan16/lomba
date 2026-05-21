@@ -183,7 +183,7 @@
     <input id="nama" placeholder="Nama siswa">
     <input id="kelas" placeholder="Kelas (contoh: XII TKJ)">
     <input id="lombaInput" placeholder="Jenis Lomba">
-    <input id="lombaInput" placeholder="Juara Keberapa Anda">
+    <input id="juara" placeholder="Juara Keberapa Anda">
     <textarea id="pesan" placeholder="Isi konfirmasi untuk mengambil hadiah...(CASH/KIRIM NOREK)"></textarea>
 
     <button onclick="kirimWA()">Kirim Konfirmasi</button>
@@ -269,11 +269,11 @@ function tutupModal() {
 function kirimWA() {
   const nama = document.getElementById("nama").value.trim();
   const kelas = document.getElementById("kelas").value.trim();
-  const juara = document.getElementById("Juara").value.trim();
+  const juara = document.getElementById("juara").value.trim();
   const jenisLomba = document.getElementById("lombaInput").value.trim();
   const pesan = document.getElementById("pesan").value.trim();
 
-  if (!nama || !kelas || !jenisLomba || !pesan) {
+  if (!nama || !kelas || !jenisLomba || !pesan || !juara) {
     alert("Lengkapi semua data!");
     return;
   }
@@ -298,7 +298,7 @@ function kirimWA() {
   const text = `📩 KONFIRMASI LOMBA%0A
 Nama: ${nama}%0A
 Kelas: ${kelas}%0A
-Kelas: ${Juara}%0A
+Juara: ${juara}%0A
 Lomba: ${jenisLomba}%0A
 Pesan: ${pesan}`;
 
